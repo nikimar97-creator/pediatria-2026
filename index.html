@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pediatria MCQ 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f7f4ef; --card: #ffffff; --text: #1a1714; --muted: #6b6560;
+    --accent: #2d5a8e; --accent-light: #e8f0fb;
+    --correct: #1a6b3c; --correct-bg: #e6f4ed;
+    --wrong: #a02020; --wrong-bg: #faeaea;
+    --border: #e2ddd7; --pill: #f0ece5;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  #app { max-width: 700px; margin: 0 auto; padding: 24px 16px 60px; }
+  .hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:26px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+  .hdr-t { font-family:'Lora',serif; font-size:19px; font-weight:600; }
+  .hdr-s { font-size:12px; color:var(--muted); margin-top:2px; }
+  .prog-wrap { margin-bottom:22px; }
+  .prog-meta { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-bottom:5px; }
+  .prog-bar { height:4px; background:var(--border); border-radius:99px; overflow:hidden; }
+  .prog-fill { height:100%; background:var(--accent); border-radius:99px; transition:width 0.3s; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:26px 26px 22px; }
+  .qtag { display:inline-block; font-size:11px; font-weight:500; letter-spacing:0.5px; background:var(--accent-light); color:var(--accent); padding:3px 10px; border-radius:99px; margin-bottom:13px; text-transform:uppercase; }
+  .qtag.clin { background:#fff4e6; color:#b05a00; }
+  .qtext { font-family:'Lora',serif; font-size:15px; line-height:1.65; margin-bottom:18px; }
+  .mhint { font-size:11px; color:#7a5500; margin-bottom:11px; padding:5px 11px; background:#fffbe6; border-radius:6px; border-left:3px solid #e6a817; }
+  .opts { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+  .opt { display:flex; align-items:flex-start; gap:11px; padding:12px 14px; border-radius:10px; border:1.5px solid var(--border); background:var(--card); cursor:pointer; transition:all 0.13s; user-select:none; }
+  .opt:hover { border-color:var(--accent); background:var(--accent-light); }
+  .opt.sel { border-color:var(--accent); background:var(--accent-light); }
+  .opt.cor { border-color:var(--correct); background:var(--correct-bg); cursor:default; }
+  .opt.wrg { border-color:var(--wrong); background:var(--wrong-bg); cursor:default; }
+  .opt.rev { cursor:default; }
+  .oltr { width:25px; height:25px; border-radius:6px; flex-shrink:0; background:var(--pill); color:var(--muted); font-size:12px; font-weight:500; display:flex; align-items:center; justify-content:center; }
+  .opt.sel .oltr { background:var(--accent); color:white; }
+  .opt.cor .oltr { background:var(--correct); color:white; }
+  .opt.wrg .oltr { background:var(--wrong); color:white; }
+  .otxt { font-size:14px; line-height:1.5; color:var(--text); padding-top:3px; }
+  .fb { padding:12px 14px; border-radius:9px; font-size:13px; line-height:1.6; margin-bottom:15px; }
+  .fb.cor { background:var(--correct-bg); color:var(--correct); border:1px solid #a8d5bc; }
+  .fb.par { background:#fff8e1; color:#7a5500; border:1px solid #f5d78e; }
+  .fb.wrg { background:var(--wrong-bg); color:var(--wrong); border:1px solid #f5b8b8; }
+  .btn { padding:10px 20px; border-radius:8px; font-size:14px; font-weight:500; cursor:pointer; border:1.5px solid var(--border); background:var(--card); color:var(--text); transition:all 0.13s; font-family:'DM Sans',sans-serif; }
+  .btn:hover:not(:disabled) { background:var(--pill); }
+  .btn.pri { background:var(--accent); color:white; border-color:var(--accent); }
+  .btn.pri:hover:not(:disabled) { background:#1e4a7a; }
+  .btn:disabled { opacity:0.4; cursor:default; }
+  .brow { display:flex; gap:10px; }
+  .mgrid { display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-bottom:18px; }
+  .mc { background:var(--card); border:1.5px solid var(--border); border-radius:12px; padding:16px 15px; cursor:pointer; transition:all 0.13s; }
+  .mc:hover:not(.mc-dis) { border-color:var(--accent); background:var(--accent-light); }
+  .mc.mc-on { border-color:var(--accent); background:var(--accent-light); }
+  .mc.mc-dis { opacity:0.45; cursor:default; }
+  .mc-ico { font-size:20px; margin-bottom:7px; }
+  .mc-nm { font-size:14px; font-weight:500; margin-bottom:3px; }
+  .mc-ds { font-size:12px; color:var(--muted); line-height:1.4; }
+  .tlist { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:18px; }
+  .tpill { padding:5px 13px; border-radius:99px; font-size:12px; font-weight:500; border:1.5px solid var(--border); background:var(--card); cursor:pointer; transition:all 0.13s; }
+  .tpill:hover { border-color:var(--accent); color:var(--accent); }
+  .tpill.ton { border-color:var(--accent); background:var(--accent); color:white; }
+  .prev { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:15px 17px; margin-bottom:18px; }
+  .prev-lbl { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:9px; }
+  .prev-row { display:flex; align-items:center; justify-content:space-between; }
+  .prev-sc { font-family:'Lora',serif; font-size:19px; color:var(--accent); }
+  .prev-mt { font-size:12px; color:var(--muted); }
+  .sring { width:108px; height:108px; border-radius:50%; border:5px solid var(--accent); display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 22px; }
+  .snum { font-family:'Lora',serif; font-size:28px; font-weight:600; color:var(--accent); }
+  .slbl { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; }
+  .rtit { font-family:'Lora',serif; font-size:19px; text-align:center; margin-bottom:4px; }
+  .rsub { font-size:13px; color:var(--muted); text-align:center; margin-bottom:22px; }
+  .srow { display:flex; gap:11px; margin-bottom:22px; }
+  .scard { flex:1; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:13px; text-align:center; }
+  .sn { font-family:'Lora',serif; font-size:21px; font-weight:600; }
+  .sn.c{color:var(--correct);} .sn.w{color:var(--wrong);} .sn.p{color:#b07500;}
+  .sl { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; margin-top:2px; }
+  .rlist { display:flex; flex-direction:column; gap:8px; }
+  .ritem { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:13px 15px; cursor:pointer; }
+  .ritem:hover { border-color:#c8c0b4; }
+  .rih { display:flex; align-items:flex-start; gap:9px; }
+  .rdot { width:9px; height:9px; border-radius:50%; flex-shrink:0; margin-top:4px; }
+  .rdot.c{background:var(--correct);} .rdot.w{background:var(--wrong);} .rdot.p{background:#e6a817;}
+  .rqn { font-size:12px; color:var(--muted); flex-shrink:0; padding-top:1px; }
+  .rqt { font-size:13px; color:var(--text); line-height:1.4; flex:1; }
+  .rdet { font-size:12px; color:var(--muted); margin-top:9px; padding-top:9px; border-top:1px solid var(--border); display:none; }
+  .rdet.open { display:block; }
+  .rca { color:var(--correct); font-weight:500; }
+  .rwa { color:var(--wrong); }
+  .slbl2 { font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; font-weight:500; margin-bottom:9px; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const QQ = [
+  {id:1,text:"The components of the urinalysis may include:",clin:false,opts:["Leukocyte esterase test","Urine microscopy during the first 3 years of life plus","Addis sedimentation test","Urine culture","Cystography"],ans:[0,1,3],top:"Nephrology"},
+  {id:2,text:"The asthma predictive index is positive in the following situations:",clin:false,opts:["Wheezing during the first 3 years of life plus parental history of asthma","Fever","Productive cough plus leukocytosis","Wheezing during the first 3 years of life plus 2 minor criteria","Isolated eosinophilia"],ans:[0,3],top:"Respiratory"},
+  {id:3,text:"Pericarditis in children has the following characteristics:",clin:false,opts:["Deafened heart sounds in large pericardial effusion","Hepatomegaly, jugular distension and hypotension in case of tamponade","Friction rub in case of large pericardial effusion","QRS low voltage on the ECG","Intensified heart sounds at auscultation"],ans:[0,1,3],top:"Cardiology"},
+  {id:4,text:"\u2605 Which clinical feature most strongly suggests viral croup rather than epiglottitis in a young child?",clin:true,opts:["High fever with drooling","Mid-day onset of respiratory distress","Toxic appearance","Barking cough with inspiratory stridor","Tripod positioning"],ans:[3],top:"Respiratory"},
+  {id:5,text:"Major Duke criteria in the diagnosis of bacterial endocarditis are:",clin:false,opts:["Mobile intracardiac mass","Abscesses","Septal aneurisma","Newly occurred partial dehiscence of a prosthetic valve","New valvar regurgitation"],ans:[0,3,4],top:"Cardiology"},
+  {id:6,text:"Classically, diabetes mellitus type 1 presents with the following clinical features:",clin:false,opts:["Weight gain","Polyuria","Hematuria","Loss of appetite","Polydipsia"],ans:[1,4],top:"Endocrinology"},
+  {id:7,text:"\u2605 Which of the following is a hallmark of moderate persistent asthma in children?",clin:true,opts:["No limitation of activity","Symptoms only with viral infections","Symptoms less than twice per week","Nighttime symptoms more than once per week","FEV1 \u2265 80% predicted"],ans:[3],top:"Respiratory"},
+  {id:8,text:"Which of the following congenital heart diseases are non-cyanotic?",clin:false,opts:["Transposition of the great arteries","Atrial septal defect","Persistent ductus arteriosus","Coarctation of the aorta","Tetralogy of Fallot"],ans:[1,2,3],top:"Cardiology"},
+  {id:9,text:"Hemolytic anemia is characterized by:",clin:false,opts:["Increased reticulocyte counts","Microcytosis and hypochromia","Decreased serum iron","Low RBC and low hemoglobin","Increased indirect bilirubin"],ans:[0,3,4],top:"Hematology-Oncology"},
+  {id:10,text:"\u2605 Which virus is the most common cause of bronchiolitis in infants?",clin:true,opts:["Respiratory syncytial virus (RSV)","Parainfluenza virus","Adenovirus","Influenza A","Rhinovirus"],ans:[0],top:"Respiratory"},
+  {id:11,text:"Treatment in febrile seizures includes:",clin:false,opts:["Reducing body temperature with antipyretics","Intravenous phenobarbital","Administration of intrarectal diazepam (Desitin), continuously","Anti-epileptic treatment (e.g. valproate) may be considered for children with risk for later epilepsy","Rectal diazepam for febrile status epilepticus"],ans:[0,3,4],top:"Neurology"},
+  {id:12,text:"\u2605 Which physical exam finding is most characteristic of bronchiolitis?",clin:true,opts:["Hyperresonance without wheeze","Absent breath sounds","Stridor at rest","Wheezing with prolonged expiration","Localized crackles"],ans:[3],top:"Respiratory"},
+  {id:13,text:"\u2605 What is the most frequent form of cardiomyopathy in children?",clin:true,opts:["Takotsubo cardiomyopathy","Restrictive cardiomyopathy","Hypertrophic cardiomyopathy","Dilated cardiomyopathy (DCM)","Hypertensive cardiomyopathy"],ans:[3],top:"Cardiology"},
+  {id:14,text:"Nephrotic syndrome is defined by:",clin:false,opts:["Edema","Hypoproteinemia, proteinuria > 40 mg/m\u00b2/h","Hyperlipidemia","Hypoproteinemia, proteinuria < 20 mg/m\u00b2/h","Low fibrinogen"],ans:[0,1,2],top:"Nephrology"},
+  {id:15,text:"\u2605 Which of the following is the first-line treatment for acute asthma exacerbation in children?",clin:true,opts:["Oral theophylline","Leukotriene receptor antagonists","Long-acting beta-agonists","Short-acting beta-agonists","Inhaled corticosteroids"],ans:[3],top:"Respiratory"},
+  {id:16,text:"A large ventricular septal defect is characterized by:",clin:false,opts:["Pulmonary hypertension","Heart failure","Low blood pressure due to \"theft of blood\"","Pulmonary embolism due to shunt","Systolic ejection murmur"],ans:[0,1,4],top:"Cardiology"},
+  {id:17,text:"Therapeutic measures for the management of edema in patients with nephrotic syndrome include:",clin:false,opts:["Salt restriction","Antibiotics","Human albumin at a dose of 1-2 g/kg/day","Furosemide","Dialysis"],ans:[0,2,3],top:"Nephrology"},
+  {id:18,text:"\u2605 Which of the following is an indication for hospitalization in an infant with bronchiolitis?",clin:true,opts:["Low-grade fever","Normal feeding","Oxygen saturation below 90%","Age over 12 months","Mild wheezing"],ans:[2],top:"Respiratory"},
+  {id:19,text:"A diagnosis of febrile seizures may be made if the following criteria are met:",clin:false,opts:["EEG is normal or may have a nonspecific slowing at 2 weeks after the febrile seizure","The seizure occurs 24 hours after the febrile episode, when the patient is afebrile","The seizure is primary generalized, usually tonico-clonic, lasting maximum 15 minutes, in the context of fever","The seizure lasts over 20 minutes","The age of the child is 7 years old"],ans:[0,2],top:"Neurology"},
+  {id:20,text:"Which of the following are typical features of viral croup?",clin:false,opts:["High fever","Barking cough","Inspiratory stridor","Drooling","Hoarseness"],ans:[1,2,4],top:"Respiratory"},
+  {id:21,text:"The following statements are FALSE, regarding acute post-streptococcal glomerulonephritis:",clin:false,opts:["The majority of patients have low C3 complement, and elevated ASLO","The majority of patients have high C3 complement, and elevated ASLO","The patient has no prior history of streptococcal infection","Symptoms include: hematuria, proteinuria, edema, hypertension","Treatment includes penicillin or an oral macrolide"],ans:[1,2],top:"Nephrology"},
+  {id:22,text:"Which findings support a diagnosis of moderate persistent asthma in children?",clin:false,opts:["Daily symptoms","Nighttime symptoms more than once per week","FEV1 \u2265 80%","FEV1 between 60-80%","Symptoms only with exercise"],ans:[0,1,3],top:"Respiratory"},
+  {id:23,text:"Which clinical features are characteristic of bronchiolitis?",clin:false,opts:["Diffuse wheezing","Crackles","Localized decreased breath sounds","Prolonged expiration","Stridor"],ans:[0,1,3],top:"Respiratory"},
+  {id:24,text:"Which clinical findings support the diagnosis of acute otitis media?",clin:false,opts:["Bulging tympanic membrane","Decreased mobility of the tympanic membrane","Clear, retracted tympanic membrane","Middle-ear effusion","Ear canal edema"],ans:[0,1,3],top:"ENT"},
+  {id:25,text:"Which are common complications of pneumonia in children?",clin:false,opts:["Pleural effusion","Empyema","Otitis externa","Lung abscess","Viral myocarditis"],ans:[0,1,3],top:"Respiratory"},
+  {id:26,text:"Which of the following symptoms are considered cardinal in childhood cancer:",clin:false,opts:["Diarrhea and vomiting","Unexplained fever","Persistent, localized pain or limping","An isolated episode of headache","Unexplained paleness and sudden tendency to bruise"],ans:[1,2,4],top:"Hematology-Oncology"},
+  {id:27,text:"The following statements are TRUE regarding childhood leukemia:",clin:false,opts:["Hemoglobin level is normal","92% of the patients have thrombocytopenia at the time of diagnosis","The bone marrow contains at least 5% atypical blasts","An isolated episode of headache","Immunophenotyping and molecular genetics are of utmost importance for characterization of the type of leukemia."],ans:[1,4],top:"Hematology-Oncology"},
+  {id:28,text:"Crohn's disease is an inflammatory bowel disease in which:",clin:false,opts:["The lesions are transmural and between ulcerations there is normal mucosa","Any segment of the digestive tract may be affected","Only the large intestine (colon) is affected","Clinical picture: chronic diarrhea with no blood, abdominal pain, malabsorption, perianal lesions, weight loss","Endoscopy reveals deep ulcers; X-ray with barium shows a \"cobblestone\" image"],ans:[0,1,3,4],top:"Gastroenterology"},
+  {id:29,text:"The following statements about hemophilia A are TRUE:",clin:false,opts:["The most frequent chronic complication is chronic hemophilic arthropathy","It is caused by a deficiency of factor IX","APTT is shortened","It is caused by a deficiency of factor VIII","The treatment of choice is substitution with factor VIII concentrates"],ans:[0,3,4],top:"Hematology-Oncology"},
+  {id:30,text:"Which symptoms are commonly associated with acute otitis media in children?",clin:false,opts:["Fever","Ear pain (otalgia)","Irritability","Productive cough","Hearing loss"],ans:[0,1,2,4],top:"ENT"},
+  {id:31,text:"What lab tests confirm the diagnosis of hereditary spherocytosis?",clin:false,opts:["Positive osmotic fragility test","Bone marrow smear","Positive autohemolysis test","Decreased serum iron","Modified hemoglobin electrophoresis"],ans:[0,2],top:"Hematology-Oncology"},
+  {id:32,text:"Treatment of primary immune thrombocytopenia (ITP) includes:",clin:false,opts:["Administration of thrombocyte concentrates","Bone marrow transplantation","Intravenous immunoglobulin 1 g/kg/day (1-2 days)","Prednisone 1-2 mg/kg/day","Administration of packed red blood cells"],ans:[2,3],top:"Hematology-Oncology"},
+  {id:33,text:"Which clinical features suggest streptococcal pharyngitis rather than viral pharyngitis?",clin:false,opts:["Sudden onset sore throat","Tender anterior cervical lymph nodes","Fever","Cough","Tonsillar exudates"],ans:[0,1,2,4],top:"ENT"},
+  {id:34,text:"Which of the following statements are TRUE regarding imaging investigations in UTI:",clin:false,opts:["DMSA scan is indicated only in boys to detect obstruction","All boys with a febrile urinary tract infection should be investigated by imaging","Girls > 12 years old, with urinary tract infections need imaging","Voiding cystourethrogram detects functional abnormalities","All girls 3-7 years old, with febrile or recurrent UTI have an indication for imaging"],ans:[1,3,4],top:"Nephrology"},
+  {id:35,text:"Which complications are associated with untreated group A streptococcal pharyngitis?",clin:false,opts:["Acute rheumatic fever","Post-streptococcal glomerulonephritis","Peritonsillar abscess","Otitis externa","Scarlet fever"],ans:[0,1,2,4],top:"ENT"},
+  {id:36,text:"Transposition of the great arteries is characterized by:",clin:false,opts:["Palliative treatment (Rashkind balloon) is life-saving in newborn babies","Cyanosis at birth is a hallmark","Oxygen therapy corrects cyanosis","Arterial switch (Jatene procedure) represents the current gold standard","The heart is \"boot-shaped\" on chest X-ray"],ans:[0,1,3],top:"Cardiology"},
+  {id:37,text:"Which findings support the diagnosis of acute adenoiditis rather than allergic rhinitis?",clin:false,opts:["Fever","Purulent rhinorrhea","Itchy eyes","Halitosis","Sneezing fits"],ans:[0,1,3],top:"ENT"},
+  {id:38,text:"The following statements are TRUE regarding acute viral diarrhea:",clin:false,opts:["Rotavirus induced diarrhea is caused by 2 mechanisms of action (invasive and secretory)","Rotavirus, adenovirus, norovirus may all be encountered in viral diarrhea","Only exceptionally, they complicate with dehydration","Diarrheal stools are bloody","Etiologic diagnosis is possible by ELISA tests (e.g. ROTALEX)"],ans:[0,1,4],top:"Gastroenterology"},
+  {id:39,text:"Which are common causes of recurrent wheezing in infants and young children?",clin:false,opts:["Viral respiratory infection (e.g. RSV, rhinovirus)","Atopy or early onset asthma","Foreign body aspiration","Prematurity/bronchopulmonary dysplasia","Acute epiglottitis"],ans:[0,1,2,3],top:"Respiratory"},
+  {id:40,text:"Coarctation of the aorta is defined by:",clin:false,opts:["Inferior limb arterial hypertension","Weak femoral pulse","Absent pulse at the radial artery","Juxtaductal narrowing of the aortic lumen","Upper limb hypertension"],ans:[1,3,4],top:"Cardiology"},
+  {id:41,text:"Which clinical features are typical of bronchopneumonia?",clin:false,opts:["Patchy crackles on auscultation","Low-grade fever","Diffuse, patchy infiltrates on chest X-ray","Sudden onset with rigors","Localized dullness to percussion"],ans:[0,2],top:"Respiratory"},
+  {id:42,text:"\u2605 Tetralogy of Fallot includes the following defects, EXCEPT one:",clin:true,opts:["Ventricular septal defect","Pulmonary artery stenosis","Overriding aorta","Atrial septal defect","Right ventricular hypertrophy"],ans:[3],top:"Cardiology"},
+  {id:43,text:"The following statements regarding iron deficiency anemia are FALSE:",clin:false,opts:["It is a hypochromic form of anemia","Red blood cells are microcytic","Ferritin is low","Anemia is normochromic","Indirect bilirubin is elevated in iron deficiency anemia"],ans:[3,4],top:"Hematology-Oncology"},
+  {id:44,text:"The pauciarticular juvenile rheumatoid arthritis is characterized by:",clin:false,opts:["This form occurs in the majority of cases and involves < 4 joints","Some children may present HLA-DR4","Particularly boys with the pauciarticular form will be HLA-B27 positive","Other organ systems such as spleen or liver are usually involved","Positive rheumatoid factor is the rule in this form"],ans:[0,1,2],top:"Rheumatology"},
+  {id:45,text:"Megaloblastic anemia is characterized by:",clin:false,opts:["Increased levels of LDH and indirect bilirubin","Low ferritin","Low reticulocyte counts","Atypical blasts in the blood smear","Increased MCV and increased RDW"],ans:[0,2,4],top:"Hematology-Oncology"},
+  {id:46,text:"The recovery phase in patients with malnutrition consists of:",clin:false,opts:["Providing the calories and nutrient intake","Correction of associated deficits","Restoring digestive tolerance by gradual introduction of unmodified cow milk","Hypercaloric nutrition with low protein intake","Proteins should represent 5-6 g/kg/day"],ans:[0,1,4],top:"Nutrition"},
+  {id:47,text:"The following tests are useful in the diagnosis of chronic diarrhea. Which statements are TRUE:",clin:false,opts:["A stool pH of > 7.2-7.4 is found in steatorrhea","The measurement of expired hydrogen, showing high values is typical for lactase deficiency","In quantitative assessment of stool lipids, a lipid content of > 5% is pathologic in children above 1 year","The sweat test is used for the diagnosis of cow-milk protein allergy","The D-xylose test is a non-specific test for malabsorption"],ans:[1,2],top:"Gastroenterology"},
+  {id:48,text:"In systemic lupus erythematosus (SLE):",clin:false,opts:["Photosensitive rash, serositis, alopecia and fever may be part of the clinical picture","Presence of anti-double stranded DNA antibodies is enough for a positive diagnosis","Probable SLE needs 2 ACR criteria for diagnosis","Hydroxychloroquine is not used in the treatment of SLE","To be classified as having SLE, a patient must meet at least 4 out of 11 ACR criteria"],ans:[0,4],top:"Rheumatology"},
+  {id:49,text:"The following statements are FALSE in gastroesophageal reflux (GER):",clin:false,opts:["Only 10% of the neonates present physiologic GER in the first week of life","Wheezing is not a symptom encountered in pathologic GER","GER is an effortless retrograde movement of the gastric contents","Is pathologic when it is complicated by distal peptic esophagitis or recurrent respiratory tract disease","Sandifer syndrome may be encountered in GERD, being confused with seizures"],ans:[0,1],top:"Gastroenterology"},
+  {id:50,text:"In hemolytic uremic syndrome, clinical manifestations present as:",clin:false,opts:["Abrupt onset with pallor and jaundice due to severe anemia","Systolic murmur grade 3/6","Purpura due to thrombocytopenia","Hypotension and bradycardia","Edema and sometimes seizures"],ans:[0,2,4],top:"Nephrology"}
+];
+
+const TOPICS=[...new Set(QQ.map(q=>q.top))];
+const LT=['A','B','C','D','E'];
+const SK='mcq_ped_2026_v1';
+let S={screen:'home',mode:'all',topics:[],pool:[],idx:0,answers:[],sel:[],revealed:false,hist:null};
+
+function loadH(){try{return JSON.parse(localStorage.getItem(SK))||null;}catch{return null;}}
+function saveH(d){try{localStorage.setItem(SK,JSON.stringify(d));}catch{}}
+function g(id){return document.getElementById(id);}
+
+function render(){
+  S.hist=S.hist||loadH();
+  const app=g('app');
+  if(S.screen==='home')rHome(app);
+  else if(S.screen==='quiz')rQuiz(app);
+  else rRes(app);
+}
+
+function rHome(app){
+  const h=S.hist;
+  let ph='';
+  if(h){
+    const p=Math.round(h.correct/h.total*100);
+    ph=`<div class="prev"><div class="prev-lbl">Ultima sessione — ${h.date}</div>
+      <div class="prev-row">
+        <div><div class="prev-sc">${p}%</div><div class="prev-mt">${h.correct}✓ ${h.partial}≈ ${h.wrong}✗ su ${h.total}</div></div>
+        <button class="btn" id="bvl">Vedi risultati →</button>
+      </div></div>`;
+  }
+  const tph=TOPICS.map(t=>`<div class="tpill${S.topics.includes(t)?' ton':''}" data-t="${t}">${t}</div>`).join('');
+  const wd=!h?' mc-dis':'';
+  app.innerHTML=`
+    <div class="hdr"><div><div class="hdr-t">Pediatria MCQ 2026</div><div class="hdr-s">50 domande · nell'ordine del file</div></div></div>
+    ${ph}
+    <div class="slbl2">Modalità</div>
+    <div class="mgrid">
+      <div class="mc${S.mode==='all'?' mc-on':''}" id="mAll"><div class="mc-ico">📚</div><div class="mc-nm">Tutte le domande</div><div class="mc-ds">Q1→Q50 nell'ordine del file</div></div>
+      <div class="mc${S.mode==='wrong'?' mc-on':''}${wd}" id="mWrg"><div class="mc-ico">🎯</div><div class="mc-nm">Ripassare gli errori</div><div class="mc-ds">Solo sbagliate o parziali</div></div>
+    </div>
+    <div class="slbl2">Filtra per argomento <span style="font-weight:400;text-transform:none">(tutti se nessuno)</span></div>
+    <div class="tlist" id="tl">${tph}</div>
+    <button class="btn pri" id="bst" style="width:100%;padding:13px">Inizia quiz →</button>`;
+  g('mAll').addEventListener('click',()=>{S.mode='all';render();});
+  if(h)g('mWrg').addEventListener('click',()=>{S.mode='wrong';render();});
+  g('tl').addEventListener('click',e=>{
+    const p=e.target.closest('.tpill');if(!p)return;
+    const t=p.dataset.t,i=S.topics.indexOf(t);
+    if(i===-1)S.topics.push(t);else S.topics.splice(i,1);
+    render();
+  });
+  g('bst').addEventListener('click',startQ);
+  if(g('bvl'))g('bvl').addEventListener('click',()=>{S.screen='results';render();});
+}
+
+function startQ(){
+  let pool=[...QQ];
+  if(S.topics.length>0)pool=pool.filter(q=>S.topics.includes(q.top));
+  if(S.mode==='wrong'&&S.hist){
+    const wi=new Set(S.hist.results.filter(r=>r.status!=='correct').map(r=>r.id));
+    pool=pool.filter(q=>wi.has(q.id));
+  }
+  if(!pool.length){alert('Nessuna domanda disponibile.');return;}
+  S.pool=pool;S.idx=0;S.answers=[];S.sel=[];S.revealed=false;S.screen='quiz';
+  render();
+}
+
+function rQuiz(app){
+  const q=S.pool[S.idx],n=S.idx+1,tot=S.pool.length;
+  const pct=((n-1)/tot*100).toFixed(0);
+  const multi=q.ans.length>1;
+  const oh=q.opts.map((o,i)=>{
+    let c='';
+    if(S.revealed){if(q.ans.includes(i))c=' cor rev';else if(S.sel.includes(i))c=' wrg rev';else c=' rev';}
+    else if(S.sel.includes(i))c=' sel';
+    return `<div class="opt${c}" data-i="${i}"><div class="oltr">${LT[i]}</div><div class="otxt">${o}</div></div>`;
+  }).join('');
+  let fb='',bb='';
+  if(S.revealed){
+    const a=S.answers[S.answers.length-1];
+    const cl=q.ans.map(i=>LT[i]).join(', ');
+    if(a.st==='correct')fb=`<div class="fb cor">✓ Corretto! Risposta/e: ${cl}</div>`;
+    else if(a.st==='partial'){const ml=q.ans.filter(i=>!a.sel.includes(i)).map(i=>LT[i]).join(', ');fb=`<div class="fb par">⚠ Parzialmente corretto — mancava: ${ml} · Corretta/e: ${cl}</div>`;}
+    else fb=`<div class="fb wrg">✗ Sbagliato. Corretta/e: ${cl}</div>`;
+    bb=`<button class="btn pri" id="bnt">${n===tot?'Vedi risultati →':'Prossima domanda →'}</button>`;
+  }else{
+    bb=`<button class="btn pri" id="bcf"${S.sel.length===0?' disabled':''}>Conferma risposta</button>`;
+  }
+  app.innerHTML=`
+    <div class="hdr">
+      <div><div class="hdr-t">Pediatria MCQ 2026</div><div class="hdr-s">Domanda ${n} di ${tot} — Q${q.id}</div></div>
+      <button class="btn" id="bex">✕ Esci</button>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-meta"><span>${n-1} completate</span><span>${tot-(n-1)} rimanenti</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="card">
+      <div class="qtag${q.clin?' clin':''}">${q.clin?'Caso clinico':'Teoria'} · ${q.top}</div>
+      ${multi?'<div class="mhint">⚠ Seleziona tutte le risposte corrette (più di una)</div>':''}
+      <div class="qtext">${q.text}</div>
+      <div class="opts" id="ol">${oh}</div>
+      ${fb}
+      <div class="brow">${bb}</div>
+    </div>`;
+  if(!S.revealed){
+    g('ol').addEventListener('click',e=>{
+      const o=e.target.closest('.opt');if(!o)return;
+      const i=parseInt(o.dataset.i),ci=S.sel.indexOf(i);
+      if(ci===-1)S.sel.push(i);else S.sel.splice(ci,1);
+      render();
+    });
+    if(g('bcf'))g('bcf').addEventListener('click',confirm_);
+  }else{
+    g('bnt').addEventListener('click',next_);
+  }
+  g('bex').addEventListener('click',()=>{S.screen='home';render();});
+}
+
+function confirm_(){
+  if(!S.sel.length)return;
+  S.revealed=true;
+  const q=S.pool[S.idx];
+  const sel=[...S.sel].sort((a,b)=>a-b);
+  const cor=[...q.ans].sort((a,b)=>a-b);
+  const allOk=JSON.stringify(sel)===JSON.stringify(cor);
+  const anyOk=sel.some(s=>cor.includes(s));
+  S.answers.push({id:q.id,sel,st:allOk?'correct':anyOk?'partial':'wrong'});
+  render();
+}
+
+function next_(){
+  if(S.idx+1<S.pool.length){S.idx++;S.sel=[];S.revealed=false;render();}
+  else finish_();
+}
+
+function finish_(){
+  const results=S.answers.map((a,i)=>{
+    const q=S.pool[i];
+    return{id:q.id,qText:q.text,top:q.top,status:a.st,selected:a.sel,correct:q.ans};
+  });
+  const correct=results.filter(r=>r.status==='correct').length;
+  const partial=results.filter(r=>r.status==='partial').length;
+  const wrong=results.filter(r=>r.status==='wrong').length;
+  const sess={date:new Date().toLocaleDateString('it-IT'),total:results.length,correct,partial,wrong,results};
+  saveH(sess);S.hist=sess;S.screen='results';render();
+}
+
+function rRes(app){
+  const h=S.hist;
+  const pct=Math.round(h.correct/h.total*100);
+  const gr=pct>=90?'🏆 Eccellente!':pct>=75?'👍 Molto bene!':pct>=60?'📖 Abbastanza bene':'💪 Continua a studiare';
+  const lh=h.results.map((r,i)=>{
+    const ca=r.correct.map(i=>LT[i]).join(', ');
+    const sa=r.selected.map(i=>LT[i]).join(', ');
+    const d=r.status==='correct'?'c':r.status==='partial'?'p':'w';
+    const st=r.qText.length>85?r.qText.substring(0,85)+'…':r.qText;
+    return `<div class="ritem" data-ri="${i}">
+      <div class="rih"><div class="rdot ${d}"></div><div class="rqn">Q${r.id}</div><div class="rqt">${st}</div></div>
+      <div class="rdet" id="rd${i}">
+        <div class="rca">✓ Corretta/e: ${ca}</div>
+        ${r.status!=='correct'?`<div class="rwa">✗ Tua risposta: ${sa}</div>`:''}
+        <div style="margin-top:4px;font-size:11px;color:var(--muted)">${r.top}</div>
+      </div></div>`;
+  }).join('');
+  app.innerHTML=`
+    <div class="hdr"><div><div class="hdr-t">Risultati</div><div class="hdr-s">${h.date}</div></div><button class="btn" id="bhm">← Home</button></div>
+    <div>
+      <div class="sring"><div class="snum">${pct}%</div><div class="slbl">Score</div></div>
+      <div class="rtit">${gr}</div>
+      <div class="rsub">${h.correct} corrette · ${h.partial} parziali · ${h.wrong} sbagliate</div>
+      <div class="srow">
+        <div class="scard"><div class="sn c">${h.correct}</div><div class="sl">Corrette</div></div>
+        <div class="scard"><div class="sn p">${h.partial}</div><div class="sl">Parziali</div></div>
+        <div class="scard"><div class="sn w">${h.wrong}</div><div class="sl">Sbagliate</div></div>
+      </div>
+      <div class="slbl2" style="margin-bottom:11px">Dettaglio — clicca per espandere</div>
+      <div class="rlist" id="rl">${lh}</div>
+      <div style="display:flex;gap:10px;margin-top:18px"><button class="btn pri" style="flex:1" id="brs">Ricomincia quiz →</button></div>
+    </div>`;
+  g('bhm').addEventListener('click',()=>{S.screen='home';render();});
+  g('brs').addEventListener('click',startQ);
+  g('rl').addEventListener('click',e=>{
+    const it=e.target.closest('.ritem');if(!it)return;
+    const d=g('rd'+it.dataset.ri);if(d)d.classList.toggle('open');
+  });
+}
+
+render();
+</script>
+</body>
+</html>
